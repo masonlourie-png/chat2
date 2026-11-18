@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ColorChat - Vibrant Community</title>
+  <link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237c3aed'/></svg>">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1e1b4b;
+      background: linear-gradient(180deg, #fdf4ff 0%, #eff6ff 50%, #ecfdf5 100%);
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg, #ec4899, #8b5cf6, #06b6d4, #10b981) 1;
+      padding: 0.9rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: linear-gradient(90deg, #ec4899, #8b5cf6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      margin-left: 1.25rem;
+      text-decoration: none;
+      color: #4c1d95;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:first-child {
+      margin-left: 0;
+    }
+
+    .nav-links a:hover {
+      color: #ec4899;
+    }
+
+    .notif-btn {
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #ffffff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+
+    .notif-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .notif-btn.active {
+      background: linear-gradient(90deg, #10b981, #06b6d4);
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 4.5rem 1.5rem;
+      background: linear-gradient(125deg, #ff0080 0%, #7928ca 45%, #0070f3 80%, #00dfd8 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(121, 40, 202, 0.2);
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 620px;
+      margin: 0 auto 2rem;
+      opacity: 0.95;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #ffffff;
+      color: #7928ca;
+      padding: 0.85rem 1.85rem;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Content Sections */
+    section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      background: linear-gradient(90deg, #db2777, #7c3aed, #0284c7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Chat Room Styles */
+    .chat-container {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.12);
+      overflow: hidden;
+      max-width: 720px;
+      margin: 0 auto;
+      border: 2px solid #e9d5ff;
+    }
+
+    .chat-header {
+      background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6);
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chat-header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chat-badge {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .test-notif-btn {
+      font-size: 0.75rem;
+      background: #fef08a;
+      color: #854d0e;
+      border: none;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .test-notif-btn:hover {
+      background: #fde047;
+    }
+
+    .chat-messages {
+      height: 330px;
+      overflow-y: auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      background: linear-gradient(180deg, #faf5ff 0%, #f0f9ff 100%);
+    }
+
+    .message {
+      background: #ffffff;
+      padding: 0.85rem 1.1rem;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      max-width: 85%;
+      align-self: flex-start;
+      border-left: 4px solid #06b6d4;
+    }
+
+    .message.own {
+      background: linear-gradient(135deg, #fdf2f8, #f3e8ff);
+      border-left: 4px solid #ec4899;
+      align-self: flex-end;
+    }
+
+    .message-meta {
+      font-size: 0.75rem;
+      color: #6b21a8;
+      margin-bottom: 0.25rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-weight: 600;
+    }
+
+    .message-text {
+      color: #1f2937;
+      word-wrap: break-word;
+    }
+
+    .chat-controls {
+      padding: 1rem;
+      background: #ffffff;
+      border-top: 2px solid #f3e8ff;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .user-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    input[type="text"] {
+      padding: 0.65rem 0.9rem;
+      border: 2px solid #e9d5ff;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #8b5cf6;
+    }
+
+    #usernameInput {
+      width: 190px;
+    }
+
+    #messageInput {
+      flex: 1;
+    }
+
+    .send-btn {
+      background: linear-gradient(90deg, #ec4899, #8b5cf6);
+      color: #ffffff;
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .send-btn:hover {
+      opacity: 0.92;
+      transform: scale(1.02);
+    }
+
+    .clear-btn {
+      background: #fce7f3;
+      color: #be185d;
+      border: none;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .clear-btn:hover {
+      background: #fbcfe8;
+    }
+
+    .chat-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #5b21b6;
+      margin-top: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Toast Notification Banner */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-width: 320px;
+    }
+
+    .toast {
+      background: linear-gradient(135deg, #4f46e5, #ec4899);
+      color: #ffffff;
+      padding: 0.9rem 1.1rem;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+      font-size: 0.9rem;
+      animation: slideIn 0.25s ease-out;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .toast-title {
+      font-weight: 800;
+      margin-bottom: 0.2rem;
+      font-size: 0.95rem;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Feature Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      padding: 1.75rem;
+      border-radius: 16px;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card:nth-child(1) {
+      background: linear-gradient(135deg, #ff6b6b, #f06595);
+    }
+
+    .card:nth-child(2) {
+      background: linear-gradient(135deg, #845ef7, #339af0);
+    }
+
+    .card:nth-child(3) {
+      background: linear-gradient(135deg, #20c997, #12b886);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .card p {
+      opacity: 0.95;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(90deg, #312e81, #581c87, #831843);
+      color: #f5d0fe;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* VIP membership */
+    .vip-section { max-width:720px; margin:0 auto; padding:2rem; border-radius:18px;
+      background:linear-gradient(135deg,#312e81,#7e22ce,#db2777); color:#fff;
+      box-shadow:0 12px 30px rgba(91,33,182,.2); }
+    .vip-section h2 { color:#fff; background:none; -webkit-text-fill-color:#fff; margin-bottom:.5rem; }
+    .vip-section p { text-align:center; margin-bottom:1rem; }
+    .vip-form { display:grid; gap:.8rem; max-width:420px; margin:1rem auto 0; }
+    .vip-form input { width:100%; padding:.8rem 1rem; border:2px solid #e9d5ff; border-radius:10px; font:inherit; }
+    .vip-form button { border:0; border-radius:10px; padding:.8rem 1rem; background:#fef08a; color:#581c87; font-weight:800; cursor:pointer; }
+    .vip-status { text-align:center; font-weight:700; margin-top:1rem; min-height:1.5rem; }
+    .vip-pill { display:inline-block; background:#fef08a; color:#713f12; border-radius:999px; padding:.1rem .45rem; font-size:.7rem; font-weight:800; margin-left:.35rem; }
+    .vip-hidden { display:none !important; }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="#" class="logo">ColorChat</a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#chat">Live Chat</a>
+          <a href="#about">About</a>
+          <a href="#services">Features</a>
+          <a href="#vip">VIP ⭐</a>
+        </div>
+        <button type="button" class="notif-btn" id="notifToggleBtn">
+          <span id="notifIcon">🔕</span>
+          <span id="notifLabel">Turn On Notifications</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Welcome to ColorChat</h1>
+    <p>Switch to another Chrome tab and send a message from a second tab to see live tab badges, red alert dots, and sound alerts in action!</p>
+    <a href="#chat" class="btn">Jump to Chat</a>
+  </div>
+
+  <section id="chat">
+    <h2>Community Chat Room</h2>
+    <div class="chat-container">
+      <div class="chat-header">
+        <span>Public Chat</span>
+        <div class="chat-header-controls">
+          <button type="button" class="test-notif-btn" id="testNotifBtn">Test Tab Alert (3s)</button>
+          <span class="chat-badge" id="statusBadge">Multi-Tab Sync</span>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages appear here -->
+      </div>
+
+      <form class="chat-controls" id="chatForm">
+        <div class="user-row">
+          <input type="text" id="usernameInput" placeholder="Your name..." maxlength="20" required>
+          <button type="button" class="clear-btn" id="clearBtn">Clear Chat</button>
+        </div>
+        <div class="input-row">
+          <input type="text" id="messageInput" placeholder="Type a message to chat..." maxlength="300" required>
+          <button type="submit" class="send-btn">Send</button>
+        </div>
+      </form>
+    </div>
+    <p class="chat-note">Tip: Turn on notifications, open this file in a second tab, switch to the other tab, and watch the browser tab title and icon light up when a message arrives!</p>
+  </section>
+
+
+  <section id="vip">
+    <div class="vip-section">
+      <h2>⭐ Join ColorChat VIP</h2>
+      <p>Unlock your VIP profile badge and stand out in the chat!</p>
+      <form class="vip-form" id="vipGateForm">
+        <label for="vipAccessCode">Enter the VIP access code</label>
+        <input id="vipAccessCode" type="password" placeholder="VIP access code" autocomplete="off" required>
+        <button type="submit">Unlock VIP registration</button>
+      </form>
+      <form class="vip-form vip-hidden" id="vipRegisterForm">
+        <label for="vipEmail">Email address</label>
+        <input id="vipEmail" type="email" placeholder="you@example.com" autocomplete="email" required>
+        <label for="vipPassword">Create a password</label>
+        <input id="vipPassword" type="password" placeholder="Create a password (8+ characters)" minlength="8" autocomplete="new-password" required>
+        <label for="vipName">Choose your chat name</label>
+        <input id="vipName" type="text" placeholder="Your username" maxlength="20" required>
+        <button type="submit">Create VIP profile ⭐</button>
+      </form>
+      <div class="vip-status" id="vipStatus" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About This Space</h2>
+    <p style="text-align: center; max-width: 700px; margin: 0 auto; color: #3b0764; font-size: 1.05rem;">
+      Even when you are browsing in another tab on your Chromebook, ColorChat updates your browser tab title with an unread count and adds a bright red dot to the tab icon.
+    </p>
+  </section>
+
+  <section id="services">
+    <h2>What We Offer</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Tab Badge Alerts</h3>
+        <p>When you switch to another tab, new messages update the tab title with a live unread counter like (1) New Message!</p>
+      </div>
+      <div class="card">
+        <h3>Red Icon Dot</h3>
+        <p>The tiny icon at the top of your Chrome tab automatically switches to a bright red alert badge whenever you have unread messages.</p>
+      </div>
+      <div class="card">
+        <h3>Auto-Clear on Return</h3>
+        <p>As soon as you click back onto this tab, the unread count resets and the tab icon returns to normal.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 ColorChat. Built with HTML, CSS &amp; JavaScript.</p>
+  </footer>
+
+  <!-- Pop-up Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const chatForm = document.getElementById('chatForm');
+    const usernameInput = document.getElementById('usernameInput');
+    const messageInput = document.getElementById('messageInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const clearBtn = document.getElementById('clearBtn');
+    const notifToggleBtn = document.getElementById('notifToggleBtn');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifLabel = document.getElementById('notifLabel');
+    const testNotifBtn = document.getElementById('testNotifBtn');
+    const toastContainer = document.getElementById('toastContainer');
+    const favicon = document.getElementById('favicon');
+
+    const STORAGE_KEY = 'my_website_chat_messages_v5';
+    const USER_KEY = 'my_website_chat_username_v5';
+    const VIP_KEY = 'colorchat_vip_member_v1';
+    const NOTIF_KEY = 'my_website_chat_notif_enabled_v5';
+
+    const DEFAULT_TITLE = 'ColorChat - Vibrant Community';
+    const NORMAL_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237c3aed'/></svg>";
+    const ALERT_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237c3aed'/><circle cx='76' cy='24' r='22' fill='%23ef4444' stroke='white' stroke-width='6'/></svg>";
+
+    let notificationsEnabled = localStorage.getItem(NOTIF_KEY) === 'true';
+    let unreadCount = 0;
+    let titleBlinkInterval = null;
+
+    // Load saved username
+    const savedName = localStorage.getItem(USER_KEY);
+    if (savedName) {
+      usernameInput.value = savedName;
+    }
+
+    // Front-end VIP demo: email/password are not saved.
+    const vipGateForm = document.getElementById('vipGateForm');
+    const vipRegisterForm = document.getElementById('vipRegisterForm');
+    const vipStatus = document.getElementById('vipStatus');
+    if (localStorage.getItem(VIP_KEY) === 'true') {
+      vipStatus.textContent = '⭐ This browser has a VIP profile. Your messages will show a VIP badge.';
+    }
+
+    vipGateForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const enteredCode = document.getElementById('vipAccessCode').value;
+      if (enteredCode === 'ollie12345') {
+        vipGateForm.classList.add('vip-hidden');
+        vipRegisterForm.classList.remove('vip-hidden');
+        vipStatus.textContent = 'Access accepted! Create your VIP profile below.';
+      } else {
+        vipStatus.textContent = 'That access code is not correct. Try again.';
+      }
+    });
+
+    vipRegisterForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('vipEmail').value.trim();
+      const password = document.getElementById('vipPassword').value;
+      const name = document.getElementById('vipName').value.trim();
+      if (!email || password.length < 8 || !name) return;
+      // Do not save email or password in this static-site demonstration.
+      localStorage.setItem(VIP_KEY, 'true');
+      localStorage.setItem(USER_KEY, name);
+      usernameInput.value = name;
+      vipRegisterForm.classList.add('vip-hidden');
+      vipStatus.textContent = '🎉 VIP profile created on this browser! Your chat name is ' + name + '.';
+      renderMessages();
+    });
+
+    // Play pleasant chime using Web Audio API
+    function playChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.45);
+      } catch (e) {}
+    }
+
+    // Update Chrome tab title & favicon when on another tab
+    function updateTabAlert() {
+      if (unreadCount > 0 && document.hidden) {
+        favicon.href = ALERT_ICON;
+        if (!titleBlinkInterval) {
+          let showAlert = true;
+          document.title = `(${unreadCount}) 🔔 New Message!`;
+          titleBlinkInterval = setInterval(() => {
+            if (!document.hidden || unreadCount === 0) {
+              clearTabAlert();
+              return;
+            }
+            document.title = showAlert
+              ? `(${unreadCount}) 💬 New Chat!`
+              : `(${unreadCount}) 🔔 ColorChat`;
+            showAlert = !showAlert;
+          }, 1200);
+        }
+      }
+    }
+
+    function clearTabAlert() {
+      unreadCount = 0;
+      favicon.href = NORMAL_ICON;
+      document.title = DEFAULT_TITLE;
+      if (titleBlinkInterval) {
+        clearInterval(titleBlinkInterval);
+        titleBlinkInterval = null;
+      }
+    }
+
+    // Clear unread badge as soon as user returns to this tab
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        clearTabAlert();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      clearTabAlert();
+    });
+
+    // Show colourful in-page toast banner
+    function showToast(sender, text) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <div class="toast-title">🔔 New message from ${escapeHTML(sender)}</div>
+        <div>${escapeHTML(text)}</div>
+      `;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 4500);
+    }
+
+    // Trigger notification (sound + tab badge + banner + desktop notification)
+    function triggerNotification(sender, text) {
+      if (!notificationsEnabled) return;
+
+      playChime();
+      showToast(sender, text);
+
+      if (document.hidden) {
+        unreadCount += 1;
+        updateTabAlert();
+      }
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(`New message from ${sender}`, {
+            body: text
+          });
+        } catch (e) {}
+      }
+    }
+
+    // Update notification button appearance
+    function updateNotifUI() {
+      if (notificationsEnabled) {
+        notifToggleBtn.classList.add('active');
+        notifIcon.textContent = '🔔';
+        notifLabel.textContent = 'Notifications On';
+      } else {
+        notifToggleBtn.classList.remove('active');
+        notifIcon.textContent = '🔕';
+        notifLabel.textContent = 'Turn On Notifications';
+        clearTabAlert();
+      }
+    }
+
+    updateNotifUI();
+
+    // Toggle notifications on click
+    notifToggleBtn.addEventListener('click', async () => {
+      notificationsEnabled = !notificationsEnabled;
+      localStorage.setItem(NOTIF_KEY, notificationsEnabled);
+      updateNotifUI();
+
+      if (notificationsEnabled) {
+        playChime();
+        if ('Notification' in window && Notification.permission === 'default') {
+          try {
+            await Notification.requestPermission();
+          } catch (e) {}
+        }
+        showToast('ColorChat', 'Notifications enabled! Switch to another tab to test alerts.');
+      }
+    });
+
+    // Test alert button with 3-second countdown so user can switch tabs
+    testNotifBtn.addEventListener('click', () => {
+      if (!notificationsEnabled) {
+        notificationsEnabled = true;
+        localStorage.setItem(NOTIF_KEY, 'true');
+        updateNotifUI();
+      }
+      testNotifBtn.textContent = 'Switch tabs now (3s)...';
+      setTimeout(() => {
+        testNotifBtn.textContent = 'Test Tab Alert (3s)';
+        triggerNotification('ColorBot', 'Hello! Look at your tab icon and title badge!');
+      }, 3000);
+    });
+
+    function getMessages() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        return JSON.parse(data);
+      }
+      return [
+        {
+          user: 'Host',
+          text: 'Welcome to ColorChat! Turn on notifications, open a second tab, and send a message to see the tab alert badge.',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }
+      ];
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function renderMessages() {
+      const messages = getMessages();
+      const currentUser = usernameInput.value.trim();
+      chatMessages.innerHTML = '';
+
+      messages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        const isOwn = currentUser && msg.user.toLowerCase() === currentUser.toLowerCase();
+        msgDiv.className = 'message' + (isOwn ? ' own' : '');
+
+        msgDiv.innerHTML = `
+          <div class="message-meta">
+            <span>${escapeHTML(msg.user)}${localStorage.getItem(VIP_KEY) === 'true' && msg.user.toLowerCase() === (localStorage.getItem(USER_KEY) || '').toLowerCase() ? ' <span class="vip-pill">VIP ⭐</span>' : ''}</span>
+            <span>${escapeHTML(msg.time)}</span>
+          </div>
+          <div class="message-text">${escapeHTML(msg.text)}</div>
+        `;
+        chatMessages.appendChild(msgDiv);
+      });
+
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const user = usernameInput.value.trim();
+      const text = messageInput.value.trim();
+
+      if (!user || !text) return;
+
+      localStorage.setItem(USER_KEY, user);
+
+      const messages = getMessages();
+      messages.push({
+        user: user,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      messageInput.value = '';
+      renderMessages();
+    });
+
+    clearBtn.addEventListener('click', function() {
+      localStorage.removeItem(STORAGE_KEY);
+      renderMessages();
+    });
+
+    // Listen for messages sent from other tabs and trigger alert
+    window.addEventListener('storage', function(e) {
+      if (e.key === STORAGE_KEY) {
+        renderMessages();
+        const messages = getMessages();
+        const latest = messages[messages.length - 1];
+        if (latest) {
+          triggerNotification(latest.user, latest.text);
+        }
+      }
+      if (e.key === NOTIF_KEY) {
+        notificationsEnabled = localStorage.getItem(NOTIF_KEY) === 'true';
+        updateNotifUI();
+      }
+    });
+
+    renderMessages();
+  </script>
+
+</body>
+</html>
